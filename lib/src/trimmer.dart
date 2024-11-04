@@ -1,9 +1,10 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:audioplayers/audioplayers.dart';
-import 'package:ffmpeg_kit_flutter/ffmpeg_kit.dart';
-import 'package:ffmpeg_kit_flutter/ffmpeg_kit_config.dart';
-import 'package:ffmpeg_kit_flutter/return_code.dart';
+import 'package:ffmpeg_kit_flutter_min_gpl/ffmpeg_kit.dart';
+import 'package:ffmpeg_kit_flutter_min_gpl/ffmpeg_kit_config.dart';
+import 'package:ffmpeg_kit_flutter_min_gpl/return_code.dart';
+
 import 'package:path/path.dart';
 
 import 'package:flutter/material.dart';
@@ -245,23 +246,22 @@ class Trimmer {
 
     command += '"$outputPath"';
 
-    FFmpegKit.executeAsync(command, (session) async {
-      final state =
-          FFmpegKitConfig.sessionStateToString(await session.getState());
-      final returnCode = await session.getReturnCode();
+  FFmpegKit.executeAsync(command, (session) async {
+  final state = FFmpegKitConfig.sessionStateToString(await session.getState());
+  final returnCode = await session.getReturnCode();
 
-      debugPrint("FFmpeg process exited with state $state and rc $returnCode");
+  debugPrint("FFmpeg process exited with state $state and rc $returnCode");
 
-      if (ReturnCode.isSuccess(returnCode)) {
-        debugPrint("FFmpeg processing completed successfully.");
-        debugPrint('Audio successfully saved');
-        onSave(outputPath);
-      } else {
-        debugPrint("FFmpeg processing failed.");
-        debugPrint('Couldn\'t save the audio');
-        onSave(null);
-      }
-    });
+  if (ReturnCode.isSuccess(returnCode)) {
+    debugPrint("FFmpeg processing completed successfully.");
+    debugPrint('Audio successfully saved');
+    onSave(outputPath);
+  } else {
+    debugPrint("FFmpeg processing failed.");
+    debugPrint('Couldn\'t save the audio');
+    onSave(null);
+  }
+});
 
     // return _outputPath;
   }
